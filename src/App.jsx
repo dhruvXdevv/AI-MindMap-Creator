@@ -6,6 +6,7 @@ import { toPng } from 'html-to-image';
 import './App.css';
 import { parseTextToMap } from './parser';
 import { getLayoutedElements } from './layout';
+import { generateMindMapFromAI } from './ai';
 
 // Initial dummy data for our map (we'll replace this with AI logic later)
 const initialNodes = [
@@ -24,6 +25,7 @@ function App() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [text, setText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Ref to grab the ReactFlow canvas for taking a screenshot
   const mapRef = useRef(null);
@@ -50,18 +52,29 @@ function App() {
       });
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!text.trim()) return;
     
-    // Pass the text to our mathematical parser algorithm
-    const { nodes: rawNodes, edges: rawEdges } = parseTextToMap(text);
+    setIsLoading(true);
     
-    // Pass the raw nodes into Dagre to get perfect auto-layout positions
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(rawNodes, rawEdges, 'LR');
-    
-    // Update React state to magically draw the beautifully balanced map!
-    setNodes(layoutedNodes);
-    setEdges(layoutedEdges);
+    try {
+      // 1. Send unstructured text to Google Gemini
+      const structuredDashedText = await generateMindMapFromAI(text);
+      
+      // 2. Pass the AI's perfect dashed text to our mathematical parser algorithm
+      const { nodes: rawNodes, edges: rawEdges } = parseTextToMap(structuredDashedText);
+      
+      // 3. Pass the raw nodes into Dagre to get perfect auto-layout positions
+      const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(rawNodes, rawEdges, 'LR');
+      
+      // Update React state to magically draw the beautifully balanced map!
+      setNodes(layoutedNodes);
+      setEdges(layoutedEdges);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -82,9 +95,14 @@ function App() {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <button className="generate-btn" onClick={handleGenerate}>
+          <button 
+            className="generate-btn" 
+            onClick={handleGenerate} 
+            disabled={isLoading}
+            style={{ opacity: isLoading ? 0.7 : 1, cursor: isLoading ? 'wait' : 'pointer' }}
+          >
             <Sparkles size={18} />
-            Generate Map
+            {isLoading ? 'Thinking...' : 'Generate Map'}
           </button>
         </div>
       </div>
