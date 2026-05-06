@@ -90,3 +90,28 @@
   position: relative;
   background: var(--bg-color);
 }
+
+.download-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.download-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}

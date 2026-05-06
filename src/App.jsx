@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ReactFlow, Background, Controls } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { BrainCircuit, Sparkles } from 'lucide-react';
+import { BrainCircuit, Sparkles, Download } from 'lucide-react';
+import { toPng } from 'html-to-image';
 import './App.css';
 import { parseTextToMap } from './parser';
 import { getLayoutedElements } from './layout';
@@ -23,6 +24,31 @@ function App() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [text, setText] = useState('');
+
+  // Ref to grab the ReactFlow canvas for taking a screenshot
+  const mapRef = useRef(null);
+
+  const handleDownload = () => {
+    if (mapRef.current === null) return;
+    
+    // We specifically target the ReactFlow viewport so we get the graph
+    const viewportNode = mapRef.current.querySelector('.react-flow__viewport');
+    if (!viewportNode) return;
+    
+    toPng(viewportNode, {
+      backgroundColor: '#0b0f19', // Match our dark mode background
+      pixelRatio: 2 // High resolution for professional export
+    })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'my-ai-mindmap.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error('Failed to export image', err);
+      });
+  };
 
   const handleGenerate = () => {
     if (!text.trim()) return;
@@ -64,7 +90,10 @@ function App() {
       </div>
 
       {/* RIGHT SIDE: The ReactFlow Canvas */}
-      <div className="map-container">
+      <div className="map-container" ref={mapRef}>
+        <button className="download-btn" onClick={handleDownload}>
+          <Download size={16} /> Export PNG
+        </button>
         <ReactFlow nodes={nodes} edges={edges}>
           <Background color="#ffffff" gap={24} size={1} opacity={0.03} />
           <Controls />
