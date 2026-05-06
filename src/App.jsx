@@ -4,6 +4,7 @@ import 'reactflow/dist/style.css';
 import { BrainCircuit, Sparkles } from 'lucide-react';
 import './App.css';
 import { parseTextToMap } from './parser';
+import { getLayoutedElements } from './layout';
 
 // Initial dummy data for our map (we'll replace this with AI logic later)
 const initialNodes = [
@@ -27,11 +28,14 @@ function App() {
     if (!text.trim()) return;
     
     // Pass the text to our mathematical parser algorithm
-    const { nodes: generatedNodes, edges: generatedEdges } = parseTextToMap(text);
+    const { nodes: rawNodes, edges: rawEdges } = parseTextToMap(text);
     
-    // Update React state to magically draw the new map!
-    setNodes(generatedNodes);
-    setEdges(generatedEdges);
+    // Pass the raw nodes into Dagre to get perfect auto-layout positions
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(rawNodes, rawEdges, 'LR');
+    
+    // Update React state to magically draw the beautifully balanced map!
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
   };
 
   return (
