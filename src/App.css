@@ -1,0 +1,92 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.sidebar {
+  width: 400px;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 20px;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.input-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-area label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.editor {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 16px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+  line-height: 1.6;
+}
+
+.editor:focus {
+  border-color: var(--accent-color);
+}
+
+.generate-btn {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.generate-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  background: var(--bg-color);
+}
