@@ -3,6 +3,7 @@ import { ReactFlow, Background, Controls } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { BrainCircuit, Sparkles } from 'lucide-react';
 import './App.css';
+import { parseTextToMap } from './parser';
 
 // Initial dummy data for our map (we'll replace this with AI logic later)
 const initialNodes = [
@@ -23,8 +24,14 @@ function App() {
   const [text, setText] = useState('');
 
   const handleGenerate = () => {
-    // This is a placeholder! Later we will build the parser here.
-    alert("Next step: We will wire this up to generate a map from your text!");
+    if (!text.trim()) return;
+    
+    // Pass the text to our mathematical parser algorithm
+    const { nodes: generatedNodes, edges: generatedEdges } = parseTextToMap(text);
+    
+    // Update React state to magically draw the new map!
+    setNodes(generatedNodes);
+    setEdges(generatedEdges);
   };
 
   return (
