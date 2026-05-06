@@ -1,5 +1,7 @@
 # 🧠 AI-Powered Dynamic Mind-Map Generator
 
+**[🚀 Try the Live App Here!](https://ai-mind-map-creator.vercel.app)**
+
 ![AI Mind Mapper Banner](https://via.placeholder.com/1200x600/0b0f19/6366f1?text=AI+Mind+Mapper)
 
 An intelligent, interactive mind-mapping tool that uses **Google Gemini AI** to instantly convert unstructured, messy notes into beautifully organized, draggable node-graphs. Built for students, engineers, and researchers to visualize complex ideas instantly.
